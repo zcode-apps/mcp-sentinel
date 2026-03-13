@@ -1,7 +1,9 @@
 {
-  "name": "mcp-security-scanner",
-  "version": "0.2.0",
+  "name": "@zcode-apps/mcp-sentinel",
+  "version": "0.2.1",
   "type": "module",
+  "main": "dist/scanner.js",
+  "types": "dist/scanner.d.ts",
   "bin": {
     "mcp-sentinel": "./dist/cli.js"
   },
@@ -10,7 +12,8 @@
   "author": "ARC",
   "license": "MIT",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node dist/cli.js"
   },
   "dependencies": {
     "chalk": "^5.3.0",

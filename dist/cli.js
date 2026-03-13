@@ -5,21 +5,21 @@ const program = new Command();
 program
     .name('mcp-sentinel')
     .description('MCP Security Scanner - Detects vulnerabilities in MCP servers')
-    .version('0.1.0');
+    .version('0.2.1');
 program
     .command('scan <url>')
     .description('Scan an MCP server endpoint for security vulnerabilities')
-    .option('-o, --output <format>', 'Output format: json, text', 'text')
-    .option('-v, --verbose', 'Show detailed output', false)
+    .option('-j, --json', 'Output as JSON', false)
+    .option('-v, --verbose', 'Show detailed evidence', false)
     .action(async (url, options) => {
     const scanner = new MCPSentinel();
-    if (options.output === 'text') {
+    if (!options.json) {
         console.log(`\n🔍 MCP Sentinel - Security Scanner\n`);
         console.log(`Target: ${url}\n`);
         console.log('─'.repeat(50));
     }
     const results = await scanner.scan(url);
-    if (options.output === 'json') {
+    if (options.json) {
         console.log(JSON.stringify(results, null, 2));
         return;
     }
@@ -35,19 +35,19 @@ program
     const low = results.filter(r => r.severity === 'low');
     if (critical.length > 0) {
         console.log('\n🔴 CRITICAL VULNERABILITIES:');
-        critical.forEach(v => printVulnerability(v, options.verbose));
+        critical.forEach(v => printVulnerability(v, options.verbose || false));
     }
     if (high.length > 0) {
         console.log('\n🟠 HIGH SEVERITY:');
-        high.forEach(v => printVulnerability(v, options.verbose));
+        high.forEach(v => printVulnerability(v, options.verbose || false));
     }
     if (medium.length > 0) {
         console.log('\n🟡 MEDIUM SEVERITY:');
-        medium.forEach(v => printVulnerability(v, options.verbose));
+        medium.forEach(v => printVulnerability(v, options.verbose || false));
     }
     if (low.length > 0) {
         console.log('\n🔵 INFO:');
-        low.forEach(v => printVulnerability(v, options.verbose));
+        low.forEach(v => printVulnerability(v, options.verbose || false));
     }
     // Summary
     console.log('\n' + '─'.repeat(50));
