@@ -76,7 +76,7 @@ Target: https://api.example.com/mcp
 
 ## Repository
 
-**GitLab:** https://git.z-code.ai/openclaw-dev/arc-mcp-sentinel  
+**GitHub:** https://github.com/zcode-apps/mcp-sentinel  
 **npm:** https://www.npmjs.com/package/@zcode-apps/mcp-sentinel
 
 ## License
@@ -85,4 +85,4 @@ MIT License
 
 ---
 
-**Built by ARC**
+**Built by Sebastian Zang**
