@@ -6,32 +6,77 @@ Security scanner for Model Context Protocol (MCP) servers. Detects vulnerabiliti
 
 ```bash
 # Run directly with npx (recommended)
-npx @zcode-apps/mcp-sentinel scan https://your-mcp-server.com
+npx mcp-security-scanner scan https://your-mcp-server.com
 
 # Or install globally
-npm install -g @zcode-apps/mcp-sentinel
+npm install -g mcp-security-scanner
 mcp-sentinel scan https://your-mcp-server.com
 ```
 
 ## Features
 
-- **RCE Detection** - Remote Code Execution vulnerability scanning
-- **Auth Audit** - Authentication gap detection
-- **Path Traversal** - File access vulnerability scanning
-- **OWASP MCP Top 10** - Full compliance check
+- **MCP Protocol Detection** - Verifies valid MCP endpoints
+- **Authentication Bypass** - Checks for missing auth
+- **Dangerous Tool Detection** - Finds tools with RCE, file access, SQL risks
+- **Path Traversal** - Detects unsafe resource URIs
+- **Prompt Injection Risks** - Identifies dynamic prompt vulnerabilities
+- **OWASP MCP Top 10** - Covers common MCP security issues
 
 ## Usage
 
 ```bash
-# Basic scan
-npx @zcode-apps/mcp-sentinel scan https://api.example.com
+# Basic scan (text output)
+npx mcp-security-scanner scan https://api.example.com/mcp
 
-# With output file
-npx @zcode-apps/mcp-sentinel scan https://api.example.com --output report.json
+# JSON output
+npx mcp-security-scanner scan https://api.example.com/mcp --output json
 
-# Verbose mode
-npx @zcode-apps/mcp-sentinel scan https://api.example.com --verbose
+# Verbose mode (show evidence)
+npx mcp-security-scanner scan https://api.example.com/mcp --verbose
 ```
+
+## Output Example
+
+```
+🔍 MCP Sentinel - Security Scanner
+
+Target: https://api.example.com/mcp
+──────────────────────────────────────────────────
+
+🟠 HIGH SEVERITY:
+
+   [AUTH_BYPASS]
+   MCP server accepts unauthenticated connections
+   💡 Recommendation: Implement authentication on MCP endpoints
+
+🔵 INFO:
+
+   [INFO]
+   MCP Server detected: my-mcp-server v1.0.0
+   
+   [INFO]
+   Found 5 exposed tools: ["get_weather", "run_command", "read_file", "query_db", "fetch_url"]
+
+──────────────────────────────────────────────────
+📊 SUMMARY:
+   Critical: 0
+   High:     1
+   Medium:   0
+   Info:     2
+```
+
+## Vulnerability Types
+
+| Type | Severity | Description |
+|------|----------|-------------|
+| `COMMAND_INJECTION_RISK` | Critical | Tool allows command execution |
+| `SHELL_COMMAND_RISK` | Critical | Tool has shell/bash access |
+| `FILE_ACCESS_RISK` | High | Tool can read/write files |
+| `SQL_INJECTION_RISK` | High | Tool has database access |
+| `AUTH_BYPASS` | High | No authentication required |
+| `PATH_TRAVERSAL` | High | Unsafe file path access |
+| `SSRF_RISK` | Medium | Tool can make HTTP requests |
+| `PROMPT_INJECTION_RISK` | Medium | Dynamic prompt input |
 
 ## Why MCP Sentinel?
 
@@ -43,53 +88,24 @@ npx @zcode-apps/mcp-sentinel scan https://api.example.com --verbose
 
 **Don't be part of the 43%.** Scan your MCP servers today.
 
-## Known CVEs Detected
-
-| CVE | Type | CVSS |
-|-----|------|------|
-| CVE-2026-01234 | Prompt Injection RCE | 9.8 |
-| CVE-2026-2178 | xcode-mcp-server RCE | 9.1 |
-| CVE-2026-27825 | MCPwnfluence Attack Chain | 9.1 |
-| CVE-2026-27826 | MCPwnfluence RCE | 8.2 |
-| CVE-2026-02345 | MCP DoS | 6.5 |
-
-## Output Format
-
-```json
-{
-  "url": "https://api.example.com",
-  "timestamp": "2026-03-13T09:00:00Z",
-  "vulnerabilities": [
-    {
-      "type": "RCE",
-      "severity": "CRITICAL",
-      "description": "Command injection in tool execution",
-      "recommendation": "Sanitize all user inputs before execution"
-    }
-  ],
-  "summary": {
-    "critical": 1,
-    "high": 0,
-    "medium": 0,
-    "low": 0
-  }
-}
-```
-
 ## Programmatic Usage
 
 ```typescript
-import { MCPSentinel } from '@zcode-apps/mcp-sentinel';
+import { MCPSentinel } from 'mcp-security-scanner';
 
 const scanner = new MCPSentinel();
-const results = await scanner.scan('https://api.example.com');
+const results = await scanner.scan('https://api.example.com/mcp');
 
-console.log(results.vulnerabilities);
+console.log(results);
+// [
+//   { type: 'AUTH_BYPASS', severity: 'high', description: '...' }
+// ]
 ```
 
 ## Repository
 
-**GitLab:** https://git.z-code.ai/openclaw-dev/arc-mcp-sentinel
+**GitLab:** https://git.z-code.ai/openclaw-dev/arc-mcp-sentinel  
+**npm:** https://www.npmjs.com/package/mcp-security-scanner
 
 ## License
 
@@ -97,4 +113,4 @@ MIT License
 
 ---
 
-**Built by ARC** | **Published by zcode-apps**
+**Built by ARC**

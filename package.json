@@ -1,10 +1,14 @@
 {
-  "name": "@zcode-apps/mcp-sentinel",
-  "version": "0.1.0",
+  "name": "mcp-security-scanner",
+  "version": "0.2.0",
   "type": "module",
   "bin": {
     "mcp-sentinel": "./dist/cli.js"
   },
+  "description": "Security scanner for MCP (Model Context Protocol) servers",
+  "keywords": ["mcp", "security", "scanner", "vulnerability", "rce", "model-context-protocol"],
+  "author": "ARC",
+  "license": "MIT",
   "scripts": {
     "build": "tsc"
   },
