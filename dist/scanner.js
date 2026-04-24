@@ -34,12 +34,7 @@ export class MCPSentinel {
             }
         }
         catch (error) {
-            results.push({
-                type: 'MCP_PROTOCOL_ERROR',
-                severity: 'medium',
-                description: `MCP endpoint not responding properly: ${error.message}`,
-                recommendation: 'Verify the URL is a valid MCP server endpoint'
-            });
+            results.push(this.classifyConnectionIssue(error));
             return results;
         }
         // 3. Check for authentication bypass
@@ -240,5 +235,54 @@ export class MCPSentinel {
         catch {
             throw new Error(`Invalid URL: ${url}`);
         }
+    }
+    classifyConnectionIssue(error) {
+        const message = error.message || 'Unknown connection error';
+        if (message.includes('HTTP 401') || message.includes('HTTP 403')) {
+            return {
+                type: 'AUTH_REQUIRED',
+                severity: 'low',
+                description: `Endpoint is reachable but requires authentication: ${message}`,
+                recommendation: 'Retry the scan with valid authentication or verify the endpoint access policy.'
+            };
+        }
+        if (message.includes('HTTP 404')) {
+            return {
+                type: 'ENDPOINT_NOT_FOUND',
+                severity: 'medium',
+                description: `No MCP endpoint was found at this URL: ${message}`,
+                recommendation: 'Verify the MCP path. Many servers expose MCP under a dedicated route such as /mcp.'
+            };
+        }
+        if (message.includes('HTTP 405')) {
+            return {
+                type: 'METHOD_NOT_ALLOWED',
+                severity: 'medium',
+                description: `Endpoint is reachable but does not accept MCP requests at this route: ${message}`,
+                recommendation: 'Verify that the URL points to an MCP JSON-RPC endpoint that accepts POST requests.'
+            };
+        }
+        if (message.includes('Response was not valid JSON') || message.includes('Empty response body')) {
+            return {
+                type: 'NON_MCP_RESPONSE',
+                severity: 'medium',
+                description: `Endpoint responded, but not with a valid MCP JSON-RPC payload: ${message}`,
+                recommendation: 'Verify that the target is an MCP endpoint and not a regular website or API route.'
+            };
+        }
+        if (message.includes('Invalid URL')) {
+            return {
+                type: 'INVALID_URL',
+                severity: 'medium',
+                description: `The provided target URL is invalid: ${message}`,
+                recommendation: 'Provide a full URL including protocol and path.'
+            };
+        }
+        return {
+            type: 'MCP_PROTOCOL_ERROR',
+            severity: 'medium',
+            description: `MCP endpoint not responding properly: ${message}`,
+            recommendation: 'Verify the URL is a valid MCP server endpoint and that the service is reachable.'
+        };
     }
 }

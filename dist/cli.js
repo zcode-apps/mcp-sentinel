@@ -6,12 +6,12 @@ const program = new Command();
 program
     .name('mcp-sentinel')
     .description('MCP Security Scanner - Detects vulnerabilities in MCP servers')
-    .version(APP_VERSION);
+    .version(APP_VERSION, '-v, --version', 'Show the current version');
 program
     .command('scan <url>')
     .description('Scan an MCP server endpoint for security vulnerabilities')
     .option('-j, --json', 'Output as JSON', false)
-    .option('-v, --verbose', 'Show detailed evidence', false)
+    .option('-d, --verbose', 'Show detailed evidence', false)
     .action(async (url, options) => {
     const scanner = new MCPSentinel();
     if (!options.json) {

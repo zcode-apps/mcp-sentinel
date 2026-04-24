@@ -13,4 +13,5 @@ export declare class MCPSentinel {
     private checkPathTraversal;
     private analyzePrompt;
     private normalizeUrl;
+    private classifyConnectionIssue;
 }
