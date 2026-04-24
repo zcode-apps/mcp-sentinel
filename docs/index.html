@@ -367,31 +367,31 @@
             <a href="#" class="logo"><span>MCP</span>SENTINEL</a>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
-                <li><a href="#cves">CVEs</a></li>
+                <li><a href="#approach">Approach</a></li>
                 <li><a href="#docs">Docs</a></li>
-                <li><a href="https://git.z-code.ai/openclaw-dev/arc-mcp-sentinel" class="btn btn-outline">GitHub</a></li>
+                <li><a href="https://github.com/zcode-apps/mcp-sentinel" class="btn btn-outline">GitHub</a></li>
             </ul>
         </nav>
     </header>
 
     <section class="hero">
         <div class="container">
-            <h1>Secure Your <span class="highlight">MCP Servers</span></h1>
-            <p class="subtitle">43% of MCP servers are vulnerable to RCE. Don't be one of them.</p>
+            <h1>Audit Your <span class="highlight">MCP Servers</span></h1>
+            <p class="subtitle">Fast heuristic checks for exposed MCP endpoints, risky tools, prompts, and resources.</p>
             
             <div class="terminal">
                 <div class="terminal-content">
                     <div class="terminal-line">
-                        <span class="prompt">$</span> npx @arc/mcp-sentinel scan https://api.example.com
+                        <span class="prompt">$</span> npx @zcode-apps/mcp-sentinel scan https://api.example.com/mcp
                     </div>
                     <div class="terminal-line output">
                         🔍 Scanning MCP server...
                     </div>
-                    <div class="terminal-line error">
-                        ❌ CRITICAL: RCE vulnerability detected in tool execution
+                    <div class="terminal-line output">
+                        ℹ MCP server detected: example-server v1.0.0
                     </div>
                     <div class="terminal-line warning">
-                        ⚠️  WARNING: Missing authentication on 3 endpoints
+                        ⚠️  WARNING: Unauthenticated endpoint access accepted
                     </div>
                     <div class="terminal-line">
                         <span class="prompt">$</span> <span style="animation: blink 1s infinite;">_</span>
@@ -403,16 +403,16 @@
 
     <section class="stats container">
         <div class="stat">
-            <div class="stat-number">43%</div>
-            <div class="stat-label">MCP Servers Vulnerable to RCE</div>
+            <div class="stat-number">CLI</div>
+            <div class="stat-label">Human-readable or JSON output</div>
         </div>
         <div class="stat">
-            <div class="stat-number">5,200+</div>
-            <div class="stat-label">Exposed MCP Servers</div>
+            <div class="stat-number">4</div>
+            <div class="stat-label">Remote MCP methods queried</div>
         </div>
         <div class="stat">
-            <div class="stat-number">60+</div>
-            <div class="stat-label">Documented CVEs</div>
+            <div class="stat-number">10s</div>
+            <div class="stat-label">Default request timeout</div>
         </div>
     </section>
 
@@ -421,23 +421,23 @@
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">🔓</div>
-                <h3 class="feature-title">RCE Detection</h3>
-                <p class="feature-desc">Command injection vulnerability scanning. Detects tool execution exploits before attackers do.</p>
+                <h3 class="feature-title">Endpoint Validation</h3>
+                <p class="feature-desc">Confirms that the target behaves like an MCP endpoint by attempting an initialize handshake.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🔐</div>
                 <h3 class="feature-title">Auth Audit</h3>
-                <p class="feature-desc">Authentication gap detection. Finds exposed endpoints missing proper auth.</p>
+                <p class="feature-desc">Checks whether the endpoint accepts unauthenticated connections.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">📂</div>
                 <h3 class="feature-title">Path Traversal</h3>
-                <p class="feature-desc">File access vulnerability scanning. Prevents unauthorized file system access.</p>
+                <p class="feature-desc">Flags suspicious resource URIs such as traversal markers or sensitive filesystem references.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">🛡️</div>
-                <h3 class="feature-title">OWASP MCP Top 10</h3>
-                <p class="feature-desc">Full compliance check against OWASP MCP security standards.</p>
+                <h3 class="feature-title">Tool Risk Heuristics</h3>
+                <p class="feature-desc">Reviews tool names, descriptions, and input schemas for common command, file, SQL, and request risks.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">⚡</div>
@@ -447,47 +447,47 @@
             <div class="feature-card">
                 <div class="feature-icon">📊</div>
                 <h3 class="feature-title">Detailed Reports</h3>
-                <p class="feature-desc">JSON output with severity scores. CI/CD ready integration.</p>
+                <p class="feature-desc">Console output for humans and JSON output for CI checks or downstream processing.</p>
             </div>
         </div>
     </section>
 
-    <section class="cve-list" id="cves">
+    <section class="cve-list" id="approach">
         <div class="container">
-            <h2 class="section-title">Recent CVEs Detected</h2>
+            <h2 class="section-title">What The Current Release Does</h2>
             <table class="cve-table">
                 <thead>
                     <tr>
-                        <th>CVE ID</th>
-                        <th>Description</th>
-                        <th>CVSS</th>
-                        <th>Type</th>
+                        <th>Area</th>
+                        <th>Current behavior</th>
+                        <th>Confidence</th>
+                        <th>Notes</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><span class="cve-id">CVE-2026-01234</span></td>
-                        <td>MCP Prompt Injection RCE</td>
-                        <td><span class="cvss critical">9.8</span></td>
-                        <td>RCE</td>
+                        <td><span class="cve-id">Handshake</span></td>
+                        <td>Performs an <code>initialize</code> request and reports protocol failures clearly.</td>
+                        <td><span class="cvss high">High</span></td>
+                        <td>Backed by live endpoint behavior.</td>
                     </tr>
                     <tr>
-                        <td><span class="cve-id">CVE-2026-2178</span></td>
-                        <td>xcode-mcp-server Command Injection</td>
-                        <td><span class="cvss critical">9.1</span></td>
-                        <td>RCE</td>
+                        <td><span class="cve-id">Tools</span></td>
+                        <td>Reads <code>tools/list</code> and classifies risky capabilities heuristically.</td>
+                        <td><span class="cvss high">Medium</span></td>
+                        <td>Useful for triage, not proof of exploitability.</td>
                     </tr>
                     <tr>
-                        <td><span class="cve-id">CVE-2026-27825</span></td>
-                        <td>MCPwnfluence Attack Chain</td>
-                        <td><span class="cvss critical">9.1</span></td>
-                        <td>RCE</td>
+                        <td><span class="cve-id">Resources</span></td>
+                        <td>Reads <code>resources/list</code> and flags suspicious filesystem-style URIs.</td>
+                        <td><span class="cvss high">Medium</span></td>
+                        <td>Focuses on obvious traversal indicators.</td>
                     </tr>
                     <tr>
-                        <td><span class="cve-id">CVE-2026-02345</span></td>
-                        <td>MCP DoS via Resource Exhaustion</td>
-                        <td><span class="cvss high">6.5</span></td>
-                        <td>DoS</td>
+                        <td><span class="cve-id">Prompts</span></td>
+                        <td>Reads <code>prompts/list</code> and highlights prompts that appear to consume dynamic user input.</td>
+                        <td><span class="cvss high">Low</span></td>
+                        <td>Prompt text alone cannot prove prompt injection safety.</td>
                     </tr>
                 </tbody>
             </table>
@@ -495,15 +495,15 @@
     </section>
 
     <section class="cta container">
-        <h2>Ready to Secure Your MCP Server?</h2>
-        <p style="color: var(--text-muted); margin-bottom: 32px;">Start scanning in seconds with npx.</p>
+        <h2>Ready to Audit Your MCP Server?</h2>
+        <p style="color: var(--text-muted); margin-bottom: 32px;">Start with a fast remote check, then review the findings in context.</p>
         <a href="#docs" class="btn">Get Started</a>
-        <a href="https://git.z-code.ai/openclaw-dev/arc-mcp-sentinel" class="btn btn-outline">View Source</a>
+        <a href="https://github.com/zcode-apps/mcp-sentinel" class="btn btn-outline">View Source</a>
     </section>
 
     <footer>
         <div class="container">
-            <p>© 2026 ARC · MCP Sentinel · Built by OpenClaw</p>
+            <p>© 2026 MCP Sentinel · Built by Sebastian Zang</p>
         </div>
     </footer>
 

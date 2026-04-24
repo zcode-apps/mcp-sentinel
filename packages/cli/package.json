@@ -1,7 +1,8 @@
 {
   "name": "@mcp-sentinel/cli",
+  "private": true,
   "version": "0.1.0",
-  "description": "CLI tool for MCP-Sentinel",
+  "description": "Prototype CLI package for MCP-Sentinel experiments",
   "bin": {
     "mcp-sentinel": "./dist/index.js"
   },

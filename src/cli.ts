@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { MCPSentinel, Vulnerability } from './scanner.js';
+import { APP_VERSION } from './version.js';
 
 const program = new Command();
 
 program
   .name('mcp-sentinel')
   .description('MCP Security Scanner - Detects vulnerabilities in MCP servers')
-  .version('0.2.1');
+  .version(APP_VERSION);
 
 program
   .command('scan <url>')

@@ -1,10 +1,12 @@
 import fetch from 'node-fetch';
+import { APP_VERSION, MCP_PROTOCOL_VERSION } from './version.js';
 export class MCPSentinel {
     async scan(url) {
         const results = [];
-        console.error(`[MCP Sentinel] Scanning ${url}...`);
+        const normalizedUrl = this.normalizeUrl(url);
+        console.error(`[MCP Sentinel] Scanning ${normalizedUrl}...`);
         // 1. Check if MCP endpoint is accessible
-        const baseUrl = url.replace(/\/$/, '');
+        const baseUrl = normalizedUrl.replace(/\/$/, '');
         // 2. Try MCP Initialize handshake
         let serverInfo = null;
         try {
@@ -13,10 +15,10 @@ export class MCPSentinel {
                 id: 1,
                 method: 'initialize',
                 params: {
-                    protocolVersion: '2024-11-05',
+                    protocolVersion: MCP_PROTOCOL_VERSION,
                     clientInfo: {
                         name: 'mcp-sentinel',
-                        version: '0.1.0'
+                        version: APP_VERSION
                     },
                     capabilities: {}
                 }
@@ -126,7 +128,26 @@ export class MCPSentinel {
                 body: JSON.stringify(body),
                 signal: controller.signal
             });
-            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status} ${response.statusText}`);
+            }
+            const rawBody = await response.text();
+            if (!rawBody.trim()) {
+                throw new Error('Empty response body');
+            }
+            let data;
+            try {
+                data = JSON.parse(rawBody);
+            }
+            catch {
+                throw new Error('Response was not valid JSON');
+            }
+            if (data.error) {
+                const message = typeof data.error.message === 'string'
+                    ? data.error.message
+                    : 'Unknown JSON-RPC error';
+                throw new Error(`JSON-RPC error: ${message}`);
+            }
             return data;
         }
         finally {
@@ -141,7 +162,7 @@ export class MCPSentinel {
                 id: 'auth-check',
                 method: 'initialize',
                 params: {
-                    protocolVersion: '2024-11-05',
+                    protocolVersion: MCP_PROTOCOL_VERSION,
                     clientInfo: { name: 'unauthenticated', version: '1.0.0' },
                     capabilities: {}
                 }
@@ -211,5 +232,13 @@ export class MCPSentinel {
             };
         }
         return null;
+    }
+    normalizeUrl(url) {
+        try {
+            return new URL(url).toString();
+        }
+        catch {
+            throw new Error(`Invalid URL: ${url}`);
+        }
     }
 }

@@ -4,20 +4,34 @@
   "type": "module",
   "main": "dist/scanner.js",
   "types": "dist/scanner.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "bin": {
     "mcp-sentinel": "./dist/cli.js"
   },
   "description": "Security scanner for MCP (Model Context Protocol) servers",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zcode-apps/mcp-sentinel.git"
+  },
+  "homepage": "https://github.com/zcode-apps/mcp-sentinel",
+  "bugs": {
+    "url": "https://github.com/zcode-apps/mcp-sentinel/issues"
+  },
   "keywords": ["mcp", "security", "scanner", "vulnerability", "rce", "model-context-protocol"],
   "author": "ARC",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/cli.js"
+    "start": "node dist/cli.js",
+    "check": "npm run build"
   },
   "dependencies": {
     "chalk": "^5.3.0",
-    "commander": "^12.0.0",
+    "commander": "^14.0.3",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
