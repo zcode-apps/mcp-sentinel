@@ -1,6 +1,6 @@
 {
   "name": "@zcode-apps/mcp-sentinel",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "type": "module",
   "main": "dist/scanner.js",
   "types": "dist/scanner.d.ts",
@@ -21,7 +21,14 @@
   "bugs": {
     "url": "https://github.com/zcode-apps/mcp-sentinel/issues"
   },
-  "keywords": ["mcp", "security", "scanner", "vulnerability", "rce", "model-context-protocol"],
+  "keywords": [
+    "mcp",
+    "security",
+    "scanner",
+    "vulnerability",
+    "rce",
+    "model-context-protocol"
+  ],
   "author": "ARC",
   "license": "MIT",
   "scripts": {
