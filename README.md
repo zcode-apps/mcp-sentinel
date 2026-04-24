@@ -2,7 +2,7 @@
 
 Security scanner for Model Context Protocol (MCP) servers. The current CLI focuses on fast endpoint validation and heuristic risk discovery for exposed tools, resources, and prompts.
 
-![MCP Sentinel Screenshot](image.jpg)
+![MCP Sentinel Screenshot](https://raw.githubusercontent.com/zcode-apps/mcp-sentinel/main/image.jpg)
 
 ## Installation
 
